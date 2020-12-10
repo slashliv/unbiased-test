@@ -1,0 +1,34 @@
+version: '2.2'
+
+volumes:
+    postgres: ~
+
+services:
+    db:
+        image: postgres:9.6-alpine
+        volumes:
+            - "postgres:/var/lib/postgresql/data"
+        environment:
+            POSTGRES_DB: unbiased
+            POSTGRES_USER: unbiased
+            POSTGRES_PASSWORD: unbiased
+        ports:
+            - "5432:5432"
+
+    nginx:
+        build: ./docker/services/nginx
+        volumes_from:
+            - php
+        volumes:
+            - "./var/logs/nginx/:/var/log/nginx/"
+        ports:
+            - 80:80
+        depends_on:
+            - php
+
+    php:
+        build: ./docker/services/php
+        links:
+            - db
+        volumes:
+            - "./src/:/var/www/"

@@ -1,0 +1,4 @@
+enquiry_save:
+  path: /enquiry
+  methods: POST
+  controller: App\Controller\EnquiryController::createAction
